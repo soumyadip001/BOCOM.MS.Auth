@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/soumyadip001/BOCOM.MS.Auth#readme",
   "dependencies": {
+    "@aws-sdk/client-sns": "^3.890.0",
     "bcrypt": "^6.0.0",
     "compression": "^1.8.1",
     "cors": "^2.8.5",

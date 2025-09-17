@@ -9,7 +9,6 @@ export default (sequelize) => {
       phone: { type: DataTypes.STRING(20), allowNull: true },
       passwordHash: { type: DataTypes.STRING(255), allowNull: false },
       roleId: { type: DataTypes.INTEGER, allowNull: false },
-      status: { type: DataTypes.STRING(20), defaultValue: "Active" },
       language: { type: DataTypes.STRING(10), defaultValue: "en" }, // 'en'|'fr'
       enabledBiometrics: { type: DataTypes.BOOLEAN, defaultValue: false },
 
@@ -54,6 +53,15 @@ export default (sequelize) => {
       lastLoginAt: { type: DataTypes.DATE, allowNull: true },
       createdAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
       updatedAt: { type: DataTypes.DATE, defaultValue: DataTypes.NOW },
+
+      status: {
+        type: DataTypes.STRING(20),
+        defaultValue: "incomplete", // incomplete | pending | active | rejected
+      },
+      registrationStep: {
+        type: DataTypes.INTEGER,
+        defaultValue: 0, // 0=start, 1=basic info, 2=otp verified, etc.
+      },
     },
     {
       tableName: "users",
