@@ -9,4 +9,5 @@ router.post("/verify-otp", registrationController.verifyOtp);
 router.post("/address", registrationController.saveAddress);
 router.post("/submit", registrationController.finalizeRegistration);
 
+
 export default router;

@@ -17,13 +17,15 @@ export default (sequelize) => {
         type: DataTypes.STRING(50),
         allowNull: false, // e.g. Passport, ID, CompanyRegCert
       },
+      mimeType: { type: DataTypes.STRING(100) },
+      fileSize: { type: DataTypes.INTEGER },
       docUrl: {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
       status: {
         type: DataTypes.STRING(20),
-        defaultValue: "Pending", // Pending, Approved, Rejected
+        defaultValue: "pending", // uploaded | pending | approved | rejected
       },
       submittedAt: {
         type: DataTypes.DATE,
