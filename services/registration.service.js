@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import { User } from "../db/index.js";
 import { logAction } from "../utils/logger.js";
+import * as otpService from "./otp.service.js";
 
 export const startRegistration = async (
   { email, phone, password, firstName, lastName, referralCode },
@@ -24,15 +25,40 @@ export const startRegistration = async (
   return user;
 };
 
-export const verifyOtp = async (userId, success, ip, device) => {
-  if (!success) {
-    await logAction(userId, "REG_OTP_FAILED", {}, ip, device);
-    return false;
+export const sendOtpForRegistration = async (userId, phone, ip, device) => {
+  const result = await otpService.sendOtp(
+    { userId, phone, purpose: "registration" },
+    ip,
+    device
+  );
+  await logAction(userId, "REG_OTP_SENT", { phone }, ip, device);
+  return result;
+};
+
+// export const verifyOtp = async (userId, success, ip, device) => {
+//   if (!success) {
+//     await logAction(userId, "REG_OTP_FAILED", {}, ip, device);
+//     return false;
+//   }
+
+//   await User.update({ registrationStep: 2 }, { where: { id: userId } });
+//   await logAction(userId, "REG_OTP_SUCCESS", {}, ip, device);
+//   return true;
+// };
+
+export const verifyRegistrationOtp = async (userId, phone, otp, ip, device) => {
+  const result = await otpService.verifyOtp(
+    { userId, phone, otp, purpose: "registration" },
+    ip,
+    device
+  );
+
+  if (result.success) {
+    await User.update({ registrationStep: 2 }, { where: { id: userId } });
+    await logAction(userId, "REG_OTP_VERIFIED", { phone }, ip, device);
   }
 
-  await User.update({ registrationStep: 2 }, { where: { id: userId } });
-  await logAction(userId, "REG_OTP_SUCCESS", {}, ip, device);
-  return true;
+  return result;
 };
 
 export const saveAddress = async (userId, address, ip, device) => {

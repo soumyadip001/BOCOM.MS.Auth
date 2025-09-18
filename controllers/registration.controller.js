@@ -15,21 +15,35 @@ export const startRegistration = async (req, res) => {
   }
 };
 
-export const verifyOtp = async (req, res) => {
+export const sendOtp = async (req, res) => {
   try {
-    const { userId, otp } = req.body;
-    // TODO: validate OTP with OTP service
-    const success = otp === "123456"; // placeholder
-    const verified = await registrationService.verifyOtp(
+    const { userId, phone } = req.body;
+    const result = await registrationService.sendOtpForRegistration(
       userId,
-      success,
+      phone,
       req.ip,
       req.headers["user-agent"]
     );
-    if (!verified) return errorResponse(res, "Invalid OTP", 400);
-    return successResponse(res, {}, "OTP verified");
+    return successResponse(res, result, "OTP sent for registration");
   } catch (err) {
-    return errorResponse(res, "OTP verification failed");
+    return errorResponse(res, err.message || "Failed to send OTP");
+  }
+};
+
+export const verifyOtp = async (req, res) => {
+  try {
+    const { userId, phone, otp } = req.body;
+    const result = await registrationService.verifyRegistrationOtp(
+      userId,
+      phone,
+      otp,
+      req.ip,
+      req.headers["user-agent"]
+    );
+    if (!result.success) return errorResponse(res, result.message, 400);
+    return successResponse(res, {}, "Phone verified successfully");
+  } catch (err) {
+    return errorResponse(res, err.message || "OTP verification failed");
   }
 };
 
