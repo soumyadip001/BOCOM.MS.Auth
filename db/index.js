@@ -31,6 +31,7 @@ export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
 import UserModel from "../models/user.model.js";
 import CompanyModel from "../models/company.model.js";
 import UserSessionModel from "../models/userSession.model.js";
+import RefreshSessionModel from "../models/refreshSession.model.js";
 import KYCDocumentModel from "../models/kycDocument.model.js";
 import KYCDocumentHistoryModel from "../models/kycDocumentHistory.model.js";
 import PasswordChangeLogModel from "../models/passwordChangeLog.model.js";
@@ -43,6 +44,7 @@ import RolePermissionModel from "../models/rolePermission.model.js";
 export const User = UserModel(sequelize);
 export const Company = CompanyModel(sequelize);
 export const UserSession = UserSessionModel(sequelize);
+export const RefreshSession = RefreshSessionModel(sequelize);
 export const KYCDocument = KYCDocumentModel(sequelize);
 export const KYCDocumentHistory = KYCDocumentHistoryModel(sequelize);
 export const PasswordChangeLog = PasswordChangeLogModel(sequelize);
@@ -75,6 +77,11 @@ Permission.belongsToMany(Role, {
 
 User.hasMany(KYCDocument, { foreignKey: "userId", as: "kycDocuments" });
 KYCDocument.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+// User.hasMany(UserSession, { foreignKey: "userId", as: "sessions" });
+// UserSession.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+RefreshSession.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 KYCDocument.hasMany(KYCDocumentHistory, {
   foreignKey: "kycDocumentId",
