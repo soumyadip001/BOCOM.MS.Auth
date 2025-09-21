@@ -5,26 +5,26 @@ import {
   DB_PASSWORD,
   DB_HOST,
   DB_PORT,
-  DB_LOGGING,
 } from "../config/index.js";
 
 export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
-  port: DB_PORT,
-  dialect: "mssql",
-  dialectOptions: {
-    options: {
-      encrypt: true,
-      trustServerCertificate: true,
-    },
-  },
+  port: DB_PORT || 3306,
+  dialect: "mysql",
+  // dialectModule: import("mysql2"),
   pool: {
     max: 15,
     min: 0,
     acquire: 30000,
     idle: 10000,
   },
-  logging: DB_LOGGING,
+  // logging: DB_LOGGING,
+  // dialectOptions: {
+  //   ssl: {
+  //     rejectUnauthorized: false,
+  //     require: false,
+  //   },
+  // },
 });
 
 // models
@@ -92,9 +92,6 @@ KYCDocumentHistory.belongsTo(KYCDocument, {
   as: "document",
 });
 
-Company.hasMany(User, { foreignKey: "companyId", as: "employees" });
-User.belongsTo(Company, { foreignKey: "companyId", as: "company" });
-
 User.hasMany(PasswordChangeLog, { foreignKey: "userId", as: "passwordLogs" });
 PasswordChangeLog.belongsTo(User, { foreignKey: "userId", as: "user" });
 
@@ -105,8 +102,19 @@ User.hasMany(NotificationLog, { foreignKey: "userId", as: "notifications" });
 NotificationLog.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 export const connectDb = async () => {
-  await sequelize.authenticate();
-  // do not use sync({ force: true }) in prod; use migrations
-  // await sequelize.sync({ alter: true });
-  console.log("Sequelize connected to SQL Server");
+  try {
+    await sequelize.authenticate();
+    console.log("Sequelize connected to MySQL");
+  } catch (error) {
+    console.error(
+      "❌ Unable to connect to the database:",
+      DB_USER,
+      DB_PASSWORD
+    );
+    console.error("   Name:", error.name);
+    console.error("   Message:", error.message);
+    console.error("   Parent:", error.parent?.sqlMessage || error.parent);
+    console.error("   Stack:", error.stack);
+    process.exit(1);
+  }
 };
