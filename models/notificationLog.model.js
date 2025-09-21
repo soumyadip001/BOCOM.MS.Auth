@@ -22,7 +22,7 @@ export default (sequelize) => {
         allowNull: false,
       },
       status: {
-        type: DataTypes.STRING(20), // 'sent' | 'failed' | 'pending'
+        type: DataTypes.STRING(20), // 'sent' | 'failed' | 'pending' | 'otp_failed'
         defaultValue: "pending",
       },
       snsMessageId: {

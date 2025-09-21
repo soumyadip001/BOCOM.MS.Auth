@@ -6,7 +6,6 @@ import helmet from "helmet";
 import { ORIGIN, CREDENTIALS, PORT } from "../config/index.js";
 import routes from "./routes.js";
 import { connectDb } from "../db/index.js";
-// import { testConnection } from "../db/test_conn.js"
 
 const app = express();
 
@@ -18,7 +17,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Connect to the database
 await connectDb();
-// await testConnection();
 
 // Sync models with the database
 // await sequelize.sync({ alter: true });

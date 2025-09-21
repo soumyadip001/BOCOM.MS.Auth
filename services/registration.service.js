@@ -35,17 +35,6 @@ export const sendOtpForRegistration = async (userId, phone, ip, device) => {
   return result;
 };
 
-// export const verifyOtp = async (userId, success, ip, device) => {
-//   if (!success) {
-//     await logAction(userId, "REG_OTP_FAILED", {}, ip, device);
-//     return false;
-//   }
-
-//   await User.update({ registrationStep: 2 }, { where: { id: userId } });
-//   await logAction(userId, "REG_OTP_SUCCESS", {}, ip, device);
-//   return true;
-// };
-
 export const verifyRegistrationOtp = async (userId, phone, otp, ip, device) => {
   const result = await otpService.verifyOtp(
     { userId, phone, otp, purpose: "registration" },

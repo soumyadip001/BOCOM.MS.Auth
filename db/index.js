@@ -11,20 +11,12 @@ export const sequelize = new Sequelize(DB_NAME, DB_USER, DB_PASSWORD, {
   host: DB_HOST,
   port: DB_PORT || 3306,
   dialect: "mysql",
-  // dialectModule: import("mysql2"),
   pool: {
     max: 15,
     min: 0,
     acquire: 30000,
     idle: 10000,
   },
-  // logging: DB_LOGGING,
-  // dialectOptions: {
-  //   ssl: {
-  //     rejectUnauthorized: false,
-  //     require: false,
-  //   },
-  // },
 });
 
 // models
@@ -40,6 +32,7 @@ import NotificationLogModel from "../models/notificationLog.model.js";
 import RoleModel from "../models/role.model.js";
 import PermissionModel from "../models/permission.model.js";
 import RolePermissionModel from "../models/rolePermission.model.js";
+import OtpCodeModel from "../models/otpCode.model.js";
 
 export const User = UserModel(sequelize);
 export const Company = CompanyModel(sequelize);
@@ -53,6 +46,7 @@ export const NotificationLog = NotificationLogModel(sequelize);
 export const Role = RoleModel(sequelize);
 export const Permission = PermissionModel(sequelize);
 export const RolePermission = RolePermissionModel(sequelize);
+export const OtpCode = OtpCodeModel(sequelize);
 
 // Associations
 User.belongsTo(Company, { foreignKey: "companyId", as: "company" });
@@ -100,6 +94,9 @@ UserActionLog.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 User.hasMany(NotificationLog, { foreignKey: "userId", as: "notifications" });
 NotificationLog.belongsTo(User, { foreignKey: "userId", as: "user" });
+
+User.hasMany(OtpCode, { foreignKey: "userId", as: "otps" });
+OtpCode.belongsTo(User, { foreignKey: "userId", as: "user" });
 
 export const connectDb = async () => {
   try {

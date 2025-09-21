@@ -13,8 +13,13 @@ export default (sequelize) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
+      /****
+       * e.g. LOGIN, LOGOUT, TRANSFER_FUEL, RECHARGE, KYC_UPDATE
+       * OTP_VERIFY_FAIL - Failed OTP verification attempts
+       * OTP_VERIFY_SUCCESS - Successful OTP verification
+       */
       actionType: {
-        type: DataTypes.STRING(50), // e.g. LOGIN, LOGOUT, TRANSFER_FUEL, RECHARGE, KYC_UPDATE
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
       actionDetails: {

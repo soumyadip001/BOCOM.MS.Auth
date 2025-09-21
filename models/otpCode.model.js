@@ -5,7 +5,7 @@ export default (sequelize) => {
     "OtpCode",
     {
       id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-      userId: { type: DataTypes.INTEGER, allowNull: true }, // before final user creation it can be null
+      userId: { type: DataTypes.INTEGER, allowNull: true },
       phone: { type: DataTypes.STRING(20), allowNull: false },
       otpHash: { type: DataTypes.STRING(255), allowNull: false },
       purpose: { type: DataTypes.STRING(50), allowNull: false }, // registration, login, password_reset
@@ -15,6 +15,11 @@ export default (sequelize) => {
     {
       tableName: "otp_codes",
       timestamps: true,
+      indexes: [
+        { fields: ["phone"] },
+        { fields: ["purpose"] },
+        { fields: ["expiresAt"] },
+      ],
     }
   );
 
