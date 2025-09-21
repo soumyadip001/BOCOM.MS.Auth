@@ -58,9 +58,18 @@ export default (sequelize) => {
         type: DataTypes.STRING(20),
         defaultValue: "incomplete", // incomplete | pending | active | rejected
       },
+      /******
+       * registrationStep:
+       * 0 = by default on start,
+       * 1 = updated basic info,
+       * 2 = otp verified,
+       * 3 = kyc document uploaded,
+       * 4 = address updated,
+       * 5 = finalize account creating with verification pending
+       */
       registrationStep: {
         type: DataTypes.INTEGER,
-        defaultValue: 0, // 0=start, 1=basic info, 2=otp verified, etc.
+        defaultValue: 0,
       },
     },
     {

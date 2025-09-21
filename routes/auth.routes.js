@@ -1,7 +1,7 @@
 import express from "express";
 import { handleRefreshToken } from "../middleware/refresh.middleware.js";
 import { requireAuth } from "../middleware/auth.middleware.js";
-import { logout, logoutAll } from "../controllers/auth.controller.js";
+import { logout, logoutAll, listSessions } from "../controllers/auth.controller.js";
 
 const router = express.Router();
 

@@ -2,10 +2,10 @@ import { ZodError } from "zod";
 
 import { StatusCodes } from "http-status-codes";
 
-export function validateData(schema) {
+export function validateData(schema, source = "body") {
   return (req, res, next) => {
     try {
-      schema.parse(req.body);
+      schema.parse(req[source]);
       next();
     } catch (error) {
       if (error instanceof ZodError) {
